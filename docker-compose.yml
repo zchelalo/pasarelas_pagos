@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+
+  pasarelas_pagos_app:
+    build: ./
+    container_name: pasarelas_pagos_app
+    tty: true
+    ports:
+      - 3000:3000
+    environment:
+      TZ: America/Hermosillo
+    volumes:
+      - ./:/home/node/app
+      - /home/node/app/node_modules
+    depends_on:
+      pasarelas_pagos_postgres:
+        condition: service_healthy
+    command: sh -c "npm run dev"
+
+  pasarelas_pagos_postgres:
+    image: postgres:15.2
+    container_name: pasarelas_pagos_db_postgres
+    environment:
+      POSTGRES_DB: pasarelas_pagos
+      POSTGRES_PASSWORD: example
+      TZ: America/Hermosillo
+    ports:
+      - 5432:5432
+    volumes:
+      - ./DB/postgresql:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    environment:
+      TZ: America/Hermosillo
+    ports:
+      - 8080:8080
+    depends_on:
+      pasarelas_pagos_postgres:
+        condition: service_started

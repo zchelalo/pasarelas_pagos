@@ -1,0 +1,4 @@
+flyway.url=jdbc:postgresql://localhost:5432/db
+flyway.user=postgres
+flyway.password=example
+flyway.baselineOnMigrate=false
