@@ -13,6 +13,7 @@ const config = {
   API_KEY: process.env.API_KEY || 'myapikey',
   JWT_SECRET: process.env.JWT_SECRET || 'mysecret',
   JWT_RECOVERY_SECRET: process.env.JWT_RECOVERY_SECRET || 'myrecoverysecret',
+  API_KEY_ENCRYPTION_PASSWORD: process.env.API_KEY_ENCRYPTION_PASSWORD || 'myencryptionpassword',
   EMAIL_SERVER: process.env.EMAIL_SERVER,
   EMAIL_PORT: process.env.EMAIL_PORT,
   EMAIL_SECURE: process.env.EMAIL_SECURE,
