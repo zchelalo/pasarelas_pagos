@@ -1,14 +1,18 @@
 import Joi from 'joi'
 
 const id = Joi.number().integer()
-const nombre = Joi.string()
+const key = Joi.string()
+const usuarioId = Joi.number().integer()
+const pasarelaId = Joi.number().integer()
 
 const createKeySchema = Joi.object({
-  nombre: nombre.required()
+  key: key.required(),
+  usuarioId: usuarioId.required(),
+  pasarelaId: pasarelaId.required()
 })
 
 const updateKeySchema = Joi.object({
-  nombre
+  key
 })
 
 const getKeySchema = Joi.object({

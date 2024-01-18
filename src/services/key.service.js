@@ -20,7 +20,7 @@ class KeyService {
   async findOne(id) {
     const key = await KeyModel.findByPk(id)
     if (!key){
-      throw boom.notFound('Key no encontrado')
+      throw boom.notFound('Key no encontrada')
     }
     return key
   }

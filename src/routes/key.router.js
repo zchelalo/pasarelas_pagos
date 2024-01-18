@@ -1,22 +1,23 @@
 import express from 'express'
 
 import { KeyService } from '../services/key.service.js'
+import { checkRoles } from '../middlewares/auth.handler.js'
 import { validatorHandler } from '../middlewares/validator.handler.js'
 import { updateKeySchema, createKeySchema, getKeySchema } from '../schemas/key.schema.js'
 
 const router = express.Router()
 const service = new KeyService()
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkRoles('admin'), async (req, res, next) => {
   try {
-    const keyes = await service.find()
-    res.json(keyes)
+    const keys = await service.find()
+    res.json(keys)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/:id', validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
+router.get('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     const key = await service.findOne(id)
@@ -26,7 +27,7 @@ router.get('/:id', validatorHandler(getKeySchema, 'params'), async (req, res, ne
   }
 })
 
-router.post('/', validatorHandler(createKeySchema, 'body'), async (req, res, next) => {
+router.post('/', checkRoles('admin'), validatorHandler(createKeySchema, 'body'), async (req, res, next) => {
   try {
     const body = req.body
     const newKey = await service.create(body)
@@ -36,7 +37,7 @@ router.post('/', validatorHandler(createKeySchema, 'body'), async (req, res, nex
   }
 })
 
-router.patch('/:id', validatorHandler(getKeySchema, 'params'), validatorHandler(updateKeySchema, 'body'), async (req, res, next) => {
+router.patch('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params'), validatorHandler(updateKeySchema, 'body'), async (req, res, next) => {
   try {
     const { id } = req.params
     const body = req.body
@@ -47,7 +48,7 @@ router.patch('/:id', validatorHandler(getKeySchema, 'params'), validatorHandler(
   }
 })
 
-router.delete('/:id', validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
+router.delete('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     await service.delete(id)
