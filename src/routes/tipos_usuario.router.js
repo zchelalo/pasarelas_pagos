@@ -1,13 +1,14 @@
 import express from 'express'
 
 import { TiposUsuarioService } from '../services/tipos_usuario.service.js'
+import { checkRoles } from '../middlewares/auth.handler.js'
 import { validatorHandler } from '../middlewares/validator.handler.js'
 import { updateTiposUsuarioSchema, createTiposUsuarioSchema, getTiposUsuarioSchema } from '../schemas/tipos_usuario.schema.js'
 
 const router = express.Router()
 const service = new TiposUsuarioService()
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkRoles('admin'), async (req, res, next) => {
   try {
     const tiposUsuarios = await service.find()
     res.json(tiposUsuarios)
@@ -16,7 +17,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', validatorHandler(getTiposUsuarioSchema, 'params'), async (req, res, next) => {
+router.get('/:id', checkRoles('admin'), validatorHandler(getTiposUsuarioSchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     const tiposUsuario = await service.findOne(id)
@@ -26,7 +27,7 @@ router.get('/:id', validatorHandler(getTiposUsuarioSchema, 'params'), async (req
   }
 })
 
-router.post('/', validatorHandler(createTiposUsuarioSchema, 'body'), async (req, res, next) => {
+router.post('/', checkRoles('admin'), validatorHandler(createTiposUsuarioSchema, 'body'), async (req, res, next) => {
   try {
     const body = req.body
     const newTiposUsuario = await service.create(body)
@@ -36,7 +37,7 @@ router.post('/', validatorHandler(createTiposUsuarioSchema, 'body'), async (req,
   }
 })
 
-router.patch('/:id', validatorHandler(getTiposUsuarioSchema, 'params'), validatorHandler(updateTiposUsuarioSchema, 'body'), async (req, res, next) => {
+router.patch('/:id', checkRoles('admin'), validatorHandler(getTiposUsuarioSchema, 'params'), validatorHandler(updateTiposUsuarioSchema, 'body'), async (req, res, next) => {
   try {
     const { id } = req.params
     const body = req.body
@@ -47,7 +48,7 @@ router.patch('/:id', validatorHandler(getTiposUsuarioSchema, 'params'), validato
   }
 })
 
-router.delete('/:id', validatorHandler(getTiposUsuarioSchema, 'params'), async (req, res, next) => {
+router.delete('/:id', checkRoles('admin'), validatorHandler(getTiposUsuarioSchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     await service.delete(id)
