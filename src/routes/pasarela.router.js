@@ -1,13 +1,14 @@
 import express from 'express'
 
 import { PasarelaService } from '../services/pasarela.service.js'
+import { checkRoles } from '../middlewares/auth.handler.js'
 import { validatorHandler } from '../middlewares/validator.handler.js'
 import { updatePasarelaSchema, createPasarelaSchema, getPasarelaSchema } from '../schemas/pasarela.schema.js'
 
 const router = express.Router()
 const service = new PasarelaService()
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkRoles('admin'), async (req, res, next) => {
   try {
     const pasarelas = await service.find()
     res.json(pasarelas)
@@ -16,7 +17,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', validatorHandler(getPasarelaSchema, 'params'), async (req, res, next) => {
+router.get('/:id', checkRoles('admin'), validatorHandler(getPasarelaSchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     const pasarela = await service.findOne(id)
@@ -26,7 +27,7 @@ router.get('/:id', validatorHandler(getPasarelaSchema, 'params'), async (req, re
   }
 })
 
-router.post('/', validatorHandler(createPasarelaSchema, 'body'), async (req, res, next) => {
+router.post('/', checkRoles('admin'), validatorHandler(createPasarelaSchema, 'body'), async (req, res, next) => {
   try {
     const body = req.body
     const newPasarela = await service.create(body)
@@ -36,7 +37,7 @@ router.post('/', validatorHandler(createPasarelaSchema, 'body'), async (req, res
   }
 })
 
-router.patch('/:id', validatorHandler(getPasarelaSchema, 'params'), validatorHandler(updatePasarelaSchema, 'body'), async (req, res, next) => {
+router.patch('/:id', checkRoles('admin'), validatorHandler(getPasarelaSchema, 'params'), validatorHandler(updatePasarelaSchema, 'body'), async (req, res, next) => {
   try {
     const { id } = req.params
     const body = req.body
@@ -47,7 +48,7 @@ router.patch('/:id', validatorHandler(getPasarelaSchema, 'params'), validatorHan
   }
 })
 
-router.delete('/:id', validatorHandler(getPasarelaSchema, 'params'), async (req, res, next) => {
+router.delete('/:id', checkRoles('admin'), validatorHandler(getPasarelaSchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     await service.delete(id)

@@ -49,7 +49,6 @@ class Pasarela extends Model {
       timestamps: true,
       hooks: {
         beforeCreate: async (pasarela, options) => {
-          console.log(pasarela)
           const password = config.API_KEY_ENCRYPTION_PASSWORD // Obtener la contraseña desde una variable de entorno
           const claveCifrado = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32)
           const datosEncriptados = await encriptar(pasarela.apiKey, claveCifrado)
@@ -67,19 +66,27 @@ class Pasarela extends Model {
           }
         },
         afterFind: async (result, options) => {
-          const password = config.API_KEY_ENCRYPTION_PASSWORD // Obtener la contraseña desde una variable de entorno
-          const claveCifrado = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32)
-
-          // Desencriptar la apiKey después de una consulta SELECT
-          if (Array.isArray(result)){
-            // Si es un array (consulta múltiple)
-            for (const pasarela of result) {
-              pasarela.apiKey = await desencriptar(pasarela.apiKey.encryptedString, claveCifrado, pasarela.apiKey.iv)
+          if (result){
+            if (Array.isArray(result)){
+              if (result[0] !== undefined && result[0].apiKey){
+                const password = config.API_KEY_ENCRYPTION_PASSWORD // Obtener la contraseña desde una variable de entorno
+                const claveCifrado = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32)
+    
+                // Si es un array (consulta múltiple)
+                for (const pasarela of result) {
+                  pasarela.apiKey = await desencriptar(pasarela.apiKey.encryptedString, claveCifrado, pasarela.apiKey.iv)
+                }
+              }
+            } 
+            else{
+              if (result !== undefined && result.apiKey){
+                const password = config.API_KEY_ENCRYPTION_PASSWORD // Obtener la contraseña desde una variable de entorno
+                const claveCifrado = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32)
+  
+                // Si es un solo resultado (consulta única)
+                result.apiKey = await desencriptar(result.apiKey.encryptedString, claveCifrado, result.apiKey.iv)
+              }
             }
-          } 
-          else{
-            // Si es un solo resultado (consulta única)
-            result.apiKey = await desencriptar(result.apiKey.encryptedString, claveCifrado, pasarela.apiKey.iv)
           }
         }
       }

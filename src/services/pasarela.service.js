@@ -9,16 +9,21 @@ class PasarelaService {
 
   async create(data) {
     const newPasarela = await PasarelaModel.create(data)
+    delete newPasarela.dataValues.apiKey
     return newPasarela
   }
 
   async find() {
-    const response = await PasarelaModel.findAll()
+    const response = await PasarelaModel.findAll({
+      attributes: { exclude: ['apiKey'] }
+    })
     return response
   }
 
   async findOne(id) {
-    const pasarela = await PasarelaModel.findByPk(id)
+    const pasarela = await PasarelaModel.findByPk(id, {
+      attributes: { exclude: ['apiKey'] }
+    })
     if (!pasarela){
       throw boom.notFound('Pasarela no encontrado')
     }
@@ -28,6 +33,7 @@ class PasarelaService {
   async update(id, changes) {
     const pasarela = await this.findOne(id)
     const response = await pasarela.update(changes)
+    delete response.dataValues.apiKey
     return response
   }
 

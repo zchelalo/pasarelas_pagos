@@ -2,40 +2,40 @@ import boom from '@hapi/boom'
 
 import { sequelize } from '../libs/sequelize.js'
 
-const Tipos_usuarioModel = sequelize.models.Tipos_usuario
+const TiposUsuarioModel = sequelize.models.TiposUsuario
 
-class Tipos_usuarioService {
+class TiposUsuarioService {
   constructor(){}
 
   async create(data) {
-    const newTipos_usuario = await Tipos_usuarioModel.create(data)
-    return newTipos_usuario
+    const newTipoUsuario = await TiposUsuarioModel.create(data)
+    return newTipoUsuario
   }
 
   async find() {
-    const response = await Tipos_usuarioModel.findAll()
+    const response = await TiposUsuarioModel.findAll()
     return response
   }
 
   async findOne(id) {
-    const tipos_usuario = await Tipos_usuarioModel.findByPk(id)
-    if (!tipos_usuario){
-      throw boom.notFound('Tipos_usuario no encontrado')
+    const tipoUsuario = await TiposUsuarioModel.findByPk(id)
+    if (!tipoUsuario){
+      throw boom.notFound('Tipo usuario no encontrado')
     }
-    return tipos_usuario
+    return tipoUsuario
   }
 
   async update(id, changes) {
-    const tipos_usuario = await this.findOne(id)
-    const response = await tipos_usuario.update(changes)
+    const tipoUsuario = await this.findOne(id)
+    const response = await tipoUsuario.update(changes)
     return response
   }
 
   async delete(id) {
-    const tipos_usuario = await this.findOne(id)
-    await tipos_usuario.destroy()
+    const tipoUsuario = await this.findOne(id)
+    await tipoUsuario.destroy()
     return { id }
   }
 }
 
-export { Tipos_usuarioService }
+export { TiposUsuarioService }

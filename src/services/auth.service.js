@@ -4,8 +4,10 @@ import jwt from 'jsonwebtoken'
 
 import { config } from '../config/config.js'
 import { UsuarioService } from './usuario.service.js'
+import { TiposUsuarioService } from './tipos_usuario.service.js'
 
 const service = new UsuarioService()
+const tipoUsuarioService = new TiposUsuarioService()
 
 class AuthService {
   constructor(){}
@@ -28,9 +30,10 @@ class AuthService {
   }
 
   async signToken(usuario){
+    const tipoUsuario = await tipoUsuarioService.findOne(usuario.tiposUsuarioId)
     const payload = {
       sub: usuario.id,
-      rol: usuario.rol
+      rol: tipoUsuario.nombre
     }
     const token = jwt.sign(payload, config.JWT_SECRET, { expiresIn: '2h' })
     return token
