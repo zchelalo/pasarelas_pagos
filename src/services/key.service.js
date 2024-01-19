@@ -8,26 +8,48 @@ class KeyService {
   constructor(){}
 
   async create(data) {
+    let key = await this.findKeyByUsuarioAndPasarela(data.usuarioId, data.pasarelaId)
+    if (key !== null){
+      throw boom.conflict('El usuario ingresado ya tiene una key de la pasarela de pago seleccionada')
+    }
+    
     const newKey = await KeyModel.create(data)
+    delete newKey.dataValues.key
     return newKey
   }
 
   async find() {
-    const response = await KeyModel.findAll()
+    const response = await KeyModel.findAll({
+      attributes: { exclude: ['key'] }
+    })
     return response
   }
 
   async findOne(id) {
-    const key = await KeyModel.findByPk(id)
+    const key = await KeyModel.findByPk(id, {
+      attributes: { exclude: ['key'] }
+    })
     if (!key){
       throw boom.notFound('Key no encontrada')
     }
     return key
   }
 
-  async update(id, changes) {
+  async findKeyByUsuarioAndPasarela(usuarioId, pasarelaId) {
+    const key = await KeyModel.findOne({
+      where: {
+        usuarioId,
+        pasarelaId
+      },
+      attributes: { exclude: ['key'] }
+    })
+    return key
+  }
+
+  async update(id) {
     const key = await this.findOne(id)
-    const response = await key.update(changes)
+    const response = await key.update()
+    delete response.dataValues.key
     return response
   }
 
