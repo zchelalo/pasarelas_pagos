@@ -25,7 +25,19 @@ class PasarelaService {
       attributes: { exclude: ['apiKey'] }
     })
     if (!pasarela){
-      throw boom.notFound('Pasarela no encontrado')
+      throw boom.notFound('Pasarela no encontrada')
+    }
+    return pasarela
+  }
+
+  async findByNombre(nombre) {
+    const pasarela = await PasarelaModel.findOne({
+      where: {
+        nombre
+      }
+    })
+    if (!pasarela){
+      throw boom.notFound('Pasarela no encontrada')
     }
     return pasarela
   }
