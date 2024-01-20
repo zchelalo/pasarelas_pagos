@@ -8,7 +8,7 @@ import { createKeySchema, getKeySchema } from '../schemas/key.schema.js'
 const router = express.Router()
 const service = new KeyService()
 
-router.get('/', checkRoles('admin'), async (req, res, next) => {
+router.get('/', checkRoles('admin', 'cliente'), async (req, res, next) => {
   try {
     const keys = await service.find()
     res.json(keys)
@@ -17,7 +17,7 @@ router.get('/', checkRoles('admin'), async (req, res, next) => {
   }
 })
 
-router.get('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
+router.get('/:id', checkRoles('admin', 'cliente'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     const key = await service.findOne(id)
@@ -27,7 +27,7 @@ router.get('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params')
   }
 })
 
-router.post('/', checkRoles('admin'), validatorHandler(createKeySchema, 'body'), async (req, res, next) => {
+router.post('/', checkRoles('admin', 'cliente'), validatorHandler(createKeySchema, 'body'), async (req, res, next) => {
   try {
     const body = req.body
     const newKey = await service.create(body)
@@ -37,7 +37,7 @@ router.post('/', checkRoles('admin'), validatorHandler(createKeySchema, 'body'),
   }
 })
 
-router.patch('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
+router.patch('/:id', checkRoles('admin', 'cliente'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     const key = await service.update(id)
@@ -47,7 +47,7 @@ router.patch('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params
   }
 })
 
-router.delete('/:id', checkRoles('admin'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
+router.delete('/:id', checkRoles('admin', 'cliente'), validatorHandler(getKeySchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     await service.delete(id)
