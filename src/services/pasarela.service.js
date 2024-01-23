@@ -42,6 +42,19 @@ class PasarelaService {
     return pasarela
   }
 
+  async findByNombreWithoutApiKey(nombre) {
+    const pasarela = await PasarelaModel.findOne({
+      where: {
+        nombre
+      },
+      attributes: { exclude: ['apiKey'] }
+    })
+    if (!pasarela){
+      throw boom.notFound('Pasarela no encontrada')
+    }
+    return pasarela
+  }
+
   async update(id, changes) {
     const pasarela = await this.findOne(id)
     const response = await pasarela.update(changes)

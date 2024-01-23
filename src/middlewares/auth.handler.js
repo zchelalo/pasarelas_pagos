@@ -1,14 +1,33 @@
 import boom from '@hapi/boom'
-import { config } from '../config/config.js'
+import { KeyService } from '../services/key.service.js'
+import bcrypt from 'bcrypt'
 
-function checkApiKey(req, res, next){
-  const apiKey = req.headers['api']
-  if (apiKey === config.API_KEY){
-    next()
-  }
-  else{
+const service = new KeyService()
+
+async function checkApiKey(req, res, next){
+  const clave = req.headers.clave
+  const apikey = req.headers.apikey
+
+  if (clave === undefined || apikey === undefined) next(boom.unauthorized())
+
+  let key = undefined
+  try {
+    key = await service.findByClaveWithKey(clave)
+  } catch (error) {
     next(boom.unauthorized())
   }
+
+  if (key !== undefined) {
+    const coincidenKeys = await bcrypt.compare(apikey, key.key)
+    
+    if (coincidenKeys){
+      next()
+    }
+    else{
+      next(boom.unauthorized())
+    }
+  }
+  
 }
 
 function checkRoles(...roles){

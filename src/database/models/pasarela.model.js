@@ -39,6 +39,7 @@ const PasarelaSchema = {
 class Pasarela extends Model {
   static associate(models){
     this.hasMany(models.Key, { as: 'keys', foreignKey: 'pasarelaId' })
+    this.hasMany(models.Pago, { as: 'pagos', foreignKey: 'pasarelaId' })
   }
 
   static config(sequelize){

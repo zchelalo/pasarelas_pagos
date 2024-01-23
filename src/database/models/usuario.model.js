@@ -51,6 +51,7 @@ class Usuario extends Model {
   static associate(models){
     this.belongsTo(models.TiposUsuario, { as: 'tipoUsuario', foreignKey: 'tiposUsuarioId' })
     this.hasMany(models.Key, { as: 'keys', foreignKey: 'usuarioId' })
+    this.hasMany(models.Pago, { as: 'pagos', foreignKey: 'usuarioId' })
   }
 
   static config(sequelize){

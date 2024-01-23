@@ -9,9 +9,28 @@ const PagoSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  nombre: {
+  productos: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.ARRAY(DataTypes.JSON)
+  },
+  total: {
+    allowNull: false,
+    type: DataTypes.DECIMAL(13, 6)
+  },
+  estadoPagoId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    field: 'estado_pago_id',
+  },
+  pasarelaId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    field: 'pasarela_id',
+  },
+  usuarioId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    field: 'usuario_id',
   },
   createdAt: {
     allowNull: false,
@@ -29,7 +48,9 @@ const PagoSchema = {
 
 class Pago extends Model {
   static associate(models){
-    
+    this.belongsTo(models.EstadoPago, { as: 'estadoPago', foreignKey: 'estadoPagoId' })
+    this.belongsTo(models.Pasarela, { as: 'pasarela', foreignKey: 'pasarelaId' })
+    this.belongsTo(models.Usuario, { as: 'usuario', foreignKey: 'usuarioId' })
   }
 
   static config(sequelize){

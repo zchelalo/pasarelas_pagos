@@ -3,6 +3,7 @@ import boom from '@hapi/boom'
 import { sequelize } from '../libs/sequelize.js'
 
 const KeyModel = sequelize.models.Key
+const UsuarioModel = sequelize.models.Usuario
 
 class KeyService {
   constructor(){}
@@ -28,6 +29,38 @@ class KeyService {
   async findOne(id) {
     const key = await KeyModel.findByPk(id, {
       attributes: { exclude: ['key'] }
+    })
+    if (!key){
+      throw boom.notFound('Key no encontrada')
+    }
+    return key
+  }
+
+  async findUsuarioByKeyByClave(clave) {
+    const key = await KeyModel.findOne({
+      where: {
+        clave
+      },
+      attributes: { exclude: ['key'] },
+      include: [
+        {
+          model: UsuarioModel,
+          as: 'usuario',
+          attributes: ['id', 'nombre']
+        },
+      ]
+    })
+    if (!key){
+      throw boom.notFound('Key no encontrada')
+    }
+    return key
+  }
+
+  async findByClaveWithKey(clave) {
+    const key = await KeyModel.findOne({
+      where: {
+        clave
+      }
     })
     if (!key){
       throw boom.notFound('Key no encontrada')

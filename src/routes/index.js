@@ -1,8 +1,6 @@
 import express from 'express'
 import passport from 'passport'
 
-import { checkRoles } from '../middlewares/auth.handler.js'
-
 import { router as authRouter } from './auth.router.js'
 import { router as usuarioRouter } from './usuario.router.js'
 import { router as pasarelaRouter } from './pasarela.router.js'
@@ -18,7 +16,7 @@ function routerApi(app) {
   router.use('/pasarelas', passport.authenticate('jwt', { session: false }), pasarelaRouter)
   router.use('/tipos-usuarios', passport.authenticate('jwt', { session: false }), tiposUsuarioRouter)
   router.use('/keys', passport.authenticate('jwt', { session: false }), keyRouter)
-  router.use('/pagos', passport.authenticate('jwt', { session: false }), pagoRouter)
+  router.use('/pagos', pagoRouter)
 }
 
 export { routerApi }
