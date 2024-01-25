@@ -19,10 +19,16 @@ class KeyService {
     return newKey
   }
 
-  async find() {
-    const response = await KeyModel.findAll({
-      attributes: { exclude: ['key'] }
-    })
+  async find(parametros) {
+    let filtros = {
+      attributes: { exclude: ['key'] },
+      where: {}
+    }
+    if (parametros.clave) filtros.where.clave = parametros.clave
+    if (parametros.usuarioId) filtros.where.usuarioId = parametros.usuarioId
+    if (parametros.pasarelaId) filtros.where.pasarelaId = parametros.pasarelaId
+    
+    const response = await KeyModel.findAll(filtros)
     return response
   }
 

@@ -8,7 +8,7 @@ import { updatePasarelaSchema, createPasarelaSchema, getPasarelaSchema } from '.
 const router = express.Router()
 const service = new PasarelaService()
 
-router.get('/', checkRoles('admin'), async (req, res, next) => {
+router.get('/', checkRoles('admin', 'cliente'), async (req, res, next) => {
   try {
     const pasarelas = await service.find()
     res.json(pasarelas)
@@ -17,7 +17,7 @@ router.get('/', checkRoles('admin'), async (req, res, next) => {
   }
 })
 
-router.get('/:id', checkRoles('admin'), validatorHandler(getPasarelaSchema, 'params'), async (req, res, next) => {
+router.get('/:id', checkRoles('admin', 'cliente'), validatorHandler(getPasarelaSchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params
     const pasarela = await service.findOne(id)

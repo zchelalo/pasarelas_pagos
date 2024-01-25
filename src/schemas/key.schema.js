@@ -2,7 +2,6 @@ import Joi from 'joi'
 
 const id = Joi.number().integer()
 const clave = Joi.string()
-const key = Joi.string()
 const usuarioId = Joi.number().integer()
 const pasarelaId = Joi.number().integer()
 
@@ -15,4 +14,10 @@ const getKeySchema = Joi.object({
   id: id.required()
 })
 
-export { createKeySchema, getKeySchema }
+const getKeysSchema = Joi.object({
+  clave,
+  usuarioId,
+  pasarelaId
+})
+
+export { createKeySchema, getKeySchema, getKeysSchema }
