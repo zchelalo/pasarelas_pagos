@@ -13,7 +13,7 @@ router.post('/login', validatorHandler(loginSchema, 'body'), passport.authentica
   try {
     const token = await service.signToken(req.user)
 
-    res.json({ 'token': token })
+    res.json(token)
   } catch (error) {
     next(error)
   }

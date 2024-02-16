@@ -5,8 +5,8 @@ CREATE TABLE "pagos" (
   "estado_pago_id" INT NOT NULL,
   "pasarela_id" INT NOT NULL,
   "usuario_id" INT NOT NULL,
-  "created_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  "updated_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT (CURRENT_TIMESTAMP),
   FOREIGN KEY("estado_pago_id") REFERENCES "estado_pagos"("id") ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY("pasarela_id") REFERENCES "pasarelas"("id") ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY("usuario_id") REFERENCES "usuarios"("id") ON UPDATE CASCADE ON DELETE CASCADE

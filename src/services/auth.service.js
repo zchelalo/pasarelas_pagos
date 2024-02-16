@@ -36,7 +36,7 @@ class AuthService {
       rol: tipoUsuario.nombre
     }
     const token = jwt.sign(payload, config.JWT_SECRET, { expiresIn: '2h' })
-    return token
+    return { token, nombre: usuario.nombre }
   }
 
   async changePassword(token, newPassword){
@@ -46,7 +46,7 @@ class AuthService {
       if (usuario.recoveryToken !== token){
         throw boom.unauthorized()
       }
-      const usuarioUpdated = await service.update(usuario.id, { recoveryToken: null, password: newPassword })
+      await service.update(usuario.id, { recoveryToken: null, password: newPassword })
       return { message: 'Contraseña actualizada correctamente' }
     } catch (error) {
       throw boom.unauthorized()

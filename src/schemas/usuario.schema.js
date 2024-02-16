@@ -15,7 +15,8 @@ const createUsuarioSchema = Joi.object({
 
 const updateUsuarioSchema = Joi.object({
   nombre,
-  correo
+  correo,
+  tiposUsuarioId
 })
 
 const getUsuarioSchema = Joi.object({

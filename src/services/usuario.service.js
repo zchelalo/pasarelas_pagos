@@ -20,6 +20,7 @@ class UsuarioService {
   async find() {
     const response = await UsuarioModel.findAll({
       // attributes: ['id', 'email', 'role', 'createdAt']
+      include: 'tipoUsuario',
       attributes: { exclude: ['password', 'recoveryToken'] }
     })
     return response

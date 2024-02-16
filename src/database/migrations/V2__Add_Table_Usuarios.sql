@@ -5,7 +5,7 @@ CREATE TABLE "usuarios" (
   "password" text NOT NULL,
   "recovery_token" VARCHAR(255),
   "tipos_usuario_id" INT NOT NULL,
-  "created_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  "updated_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT (CURRENT_TIMESTAMP),
   FOREIGN KEY("tipos_usuario_id") REFERENCES "tipos_usuarios"("id") ON UPDATE CASCADE ON DELETE CASCADE
 );

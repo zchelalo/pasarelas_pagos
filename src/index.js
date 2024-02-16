@@ -13,7 +13,7 @@ const port = config.PORT
 
 app.use(express.json())
 
-const whitelist = ['chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld']
+const whitelist = ['chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld', 'http://localhost:5173']
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {

@@ -71,7 +71,9 @@ class PagoService {
   }
 
   async find() {
-    const response = await PagoModel.findAll()
+    const response = await PagoModel.findAll({
+      include: ['estadoPago', 'pasarela', 'usuario']
+    })
     return response
   }
 
